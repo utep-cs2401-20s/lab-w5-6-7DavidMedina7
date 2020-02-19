@@ -25,7 +25,21 @@ public class SnakeGame {
     }
 
     // constructor that takes a 2-dimensional boolean array, and the x and y position of the snakes "head"
-    SnakeGame(boolean[][] board, int x, int y) {}
+    SnakeGame(boolean[][] board, int x, int y) {
+
+        // Setting x and y values values in headPosition
+        headPosition[0] = x;
+        headPosition[1] = y;
+
+        // Copying everything over from game to board
+        /*for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[i].length; j++) {
+                game[i][j] = board[i][j];
+            }
+        }*/
+
+        game = board;
+    }
 
 
     // **Methods**
@@ -35,7 +49,33 @@ public class SnakeGame {
     // the head, and return 3 items: the x and y position of the tail in the grid, and the length of
     // the snake on the board. Increments the exhaustiveChecks counter with each (x',y') cell that is
     // examined.
-    public int[] findTailExhastive() {}
+    public int[] findTailExhastive() {
+
+        // Initializing length
+        int length = 0;
+
+        // Reset counters
+        resetCounters();
+
+        // Start at the first coordinate of the board
+        for(int i = 0; i < game.length; i++) {
+            for(int j = 0; i < game[i].length; j++) {
+
+                // Check if cell is part of the snake
+                if(game[i][j]){
+                    length++;
+                    // If yes: check how many neighbors are in snake and increment length++
+                }
+
+                // If no: move to next cell
+
+                // If 1: Either cell is head or tail
+
+                // If 2+: move to next cell
+            }
+        }
+
+    }
 
     // will find the tail of the snake by conducting a search starting at the head location and
     // recursively following the snake's body, and return 3 items: the x and y position of the tail in
@@ -52,7 +92,10 @@ public class SnakeGame {
     private int[] findTailRecursive(int[] currentposition, int[] previousPosition) {}
 
     // resets both the exhaustiveChecks and recursiveChecks counters to 0.
-    private void resetCounters() {}
+    private void resetCounters() {
+        exhastedChecks = 0;
+        recursiveChecks = 0;
+    }
 
     // gets the current state of the recursiveChecks counter.
     private static int getRecursiveChecks() {}
