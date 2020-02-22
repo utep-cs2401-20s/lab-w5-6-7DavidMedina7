@@ -1,6 +1,6 @@
 public class SnakeGame {
 
-    // **Attributes**
+    // **ATTRIBUTES**
 
     // Stores the final game state
     // Description: cells that are true contain part of the snake, and false are the background.
@@ -27,22 +27,19 @@ public class SnakeGame {
     // constructor that takes a 2-dimensional boolean array, and the x and y position of the snakes "head"
     SnakeGame(boolean[][] board, int x, int y) {
 
+        // Initializing the array headPosition
+        headPosition = new int[2];
+
         // Setting x and y values values in headPosition
         headPosition[0] = x;
         headPosition[1] = y;
 
-        // Copying everything over from game to board
-        /*for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[i].length; j++) {
-                game[i][j] = board[i][j];
-            }
-        }*/
-
+        // Passing the address board to game
         game = board;
     }
 
 
-    // **Methods**
+    // **METHODS**
 
     // Will find the tail of the snake by searching across the whole grid to find the grid position
     // where a true element is surrounded by only one other true cell (see figure below), but is not
@@ -50,6 +47,9 @@ public class SnakeGame {
     // the snake on the board. Increments the exhaustiveChecks counter with each (x',y') cell that is
     // examined.
     public int[] findTailExhastive() {
+
+        // Initilizing the result array
+        int[] result = new int[3];
 
         // Initializing length
         int length = 0;
@@ -61,20 +61,50 @@ public class SnakeGame {
         for(int i = 0; i < game.length; i++) {
             for(int j = 0; i < game[i].length; j++) {
 
-                // Check if cell is part of the snake
-                if(game[i][j]){
+                // Initialize neighbors
+                int neighbors = 0;
+
+                // Checks if it is part of the snake
+                if (game[i][j]) {
                     length++;
-                    // If yes: check how many neighbors are in snake and increment length++
+
+                    // If the position is head...
+                    if(i == headPosition[0] && j == headPosition[1]) {
+                        continue;
+                    }
+
+                    // Iterating around each cell to find neighbors
+                    for (int r = i - 1; r <= i + 1; r++) {
+                        for (int c = j - 1; c <= j + 1; c++) {
+
+                            // Checking if coordinate is out of bounds
+                            if (r < 0 || r >= game.length || c < 0 || c >= game[r].length) {
+                            // It is out of bounds
+                                continue;
+                            }
+
+                            // If neighbor equals true
+                            if(game[r][c]) {
+                                neighbors++;
+                            }
+                        }
+                    }
+                    if(neighbors == 1) {
+
+                        // Storing x and y positions to result
+                        result[0] = i;
+                        result[1]  = j;
+
+                        exhastedChecks++;
+                    }
                 }
-
-                // If no: move to next cell
-
-                // If 1: Either cell is head or tail
-
-                // If 2+: move to next cell
             }
-        }
 
+        }
+        // Storing length to result
+        result[2] = length;
+
+        return result;
     }
 
     // will find the tail of the snake by conducting a search starting at the head location and
@@ -97,9 +127,15 @@ public class SnakeGame {
         recursiveChecks = 0;
     }
 
+    // **GETTERS**
+
     // gets the current state of the recursiveChecks counter.
-    private static int getRecursiveChecks() {}
+    private static int getRecursiveChecks() {
+        return recursiveChecks;
+    }
 
     //  gets the current state of the exhaustiveChecks counter.
-    private static int getExhastedChecks() {}
+    private static int getExhastedChecks() {
+        return exhastedChecks;
+    }
 }
