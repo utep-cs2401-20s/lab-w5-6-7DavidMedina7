@@ -12,7 +12,7 @@ public class SnakeGame {
     private int[] headPosition;
 
     // Counts the number of positions checked when performing the tail search using exhaustive enumeration, across all instances of the SnakeGame
-    private static int exhastedChecks;
+    private static int exhaustedChecks;
 
     // Counts the number of positions checked when performing the tail search using recursive search, across all instances of the SnakeGame
     private static int recursiveChecks;
@@ -46,9 +46,9 @@ public class SnakeGame {
     // the head, and return 3 items: the x and y position of the tail in the grid, and the length of
     // the snake on the board. Increments the exhaustiveChecks counter with each (x',y') cell that is
     // examined.
-    public int[] findTailExhastive() {
+    public int[] findTailExhaustive() {
 
-        // Initilizing the result array
+        // Initializing the result array
         int[] result = new int[3];
 
         // Initializing length
@@ -57,52 +57,65 @@ public class SnakeGame {
         // Reset counters
         resetCounters();
 
+        // Boolean Check to stop incrementing number of checks
+        boolean booleanCheck = true;
+
         // Start at the first coordinate of the board
         for(int i = 0; i < game.length; i++) {
-            for(int j = 0; i < game[i].length; j++) {
+            for(int j = 0; j < game[i].length; j++) {
 
-                // Initialize neighbors
-                int neighbors = 0;
+                if(booleanCheck) {
+                   exhaustedChecks++;
+                }
+
+                System.out.println("i: " + i);
+                System.out.println("j: " + j);
+                System.out.println("Exhausted Checks: " + exhaustedChecks);
+                System.out.println();
 
                 // Checks if it is part of the snake
                 if (game[i][j]) {
+
+                    // Increment length
                     length++;
 
-                    // If the position is head...
-                    if(i == headPosition[0] && j == headPosition[1]) {
+                    // Call neighbors
+                    int numOfNeighbors = neighbors(i, j);
+
+                    // If the cell has 2 or more neighbors...
+                    if (numOfNeighbors >= 2) {
                         continue;
                     }
 
-                    // Iterating around each cell to find neighbors
-                    for (int r = i - 1; r <= i + 1; r++) {
-                        for (int c = j - 1; c <= j + 1; c++) {
+                    // If the cell only has one neighbor...
+                    if (numOfNeighbors == 1) {
 
-                            // Checking if coordinate is out of bounds
-                            if (r < 0 || r >= game.length || c < 0 || c >= game[r].length) {
-                            // It is out of bounds
-                                continue;
-                            }
-
-                            // If neighbor equals true
-                            if(game[r][c]) {
-                                neighbors++;
-                            }
+                        // If the position is head...
+                        if (i  == headPosition[0] && j == headPosition[1]) {
+                            System.out.println("Head position found at: i: " + i + " j: " + j);
                         }
-                    }
-                    if(neighbors == 1) {
 
-                        // Storing x and y positions to result
-                        result[0] = i;
-                        result[1]  = j;
+                        // Else the position is the tail
+                        else {
 
-                        exhastedChecks++;
+                            // Storing x and y positions to result
+                            result[0] = i;
+                            result[1]  = j;
+
+                            booleanCheck = false;
+
+                        }
                     }
                 }
             }
-
         }
+
         // Storing length to result
         result[2] = length;
+
+        System.out.println("Tail found at: i: " + result[0] + " j: " + result[1]);
+        System.out.println("Exhaustive Checks: " + exhaustedChecks);
+        System.out.print("The length of the snake is: " + length);
 
         return result;
     }
@@ -111,7 +124,14 @@ public class SnakeGame {
     // recursively following the snake's body, and return 3 items: the x and y position of the tail in
     // the grid, and the length of the snake on the board. Increments the recursiveChecks counter with
     // each (x',y') cell that is examined.
-    public int[] findTailRecursive() {}
+    public int[] findTailRecursive() {
+
+        // Initializing the result array
+        int[] result = new int[3];
+
+
+        return result;
+    }
 
     // overloads the previous method, and is similar in definition, but starts at a position other
     // than the head position (used for the recursive calls), also takes in the position of the
@@ -119,11 +139,25 @@ public class SnakeGame {
     // recursiveChecks counter with each (x',y') cell that is examined.
     // Hint: the call for starting from the head position made from the public method should be
     // findTailRecursive(headPosition, headPosition).
-    private int[] findTailRecursive(int[] currentposition, int[] previousPosition) {}
+    private int[] findTailRecursive(int[] currentPosition, int[] previousPosition) {
+
+        // Initializing the result array
+        int[] result = new int[3];
+
+        // Looking at head position and setting it to currentPosition
+        currentPosition = headPosition;
+
+        // Calling neighbors
+        neighbors(currentPosition[0], currentPosition[1]);
+
+
+
+        return result;
+    }
 
     // resets both the exhaustiveChecks and recursiveChecks counters to 0.
     private void resetCounters() {
-        exhastedChecks = 0;
+        exhaustedChecks = 0;
         recursiveChecks = 0;
     }
 
@@ -136,6 +170,51 @@ public class SnakeGame {
 
     //  gets the current state of the exhaustiveChecks counter.
     private static int getExhastedChecks() {
-        return exhastedChecks;
+        return exhaustedChecks;
     }
+
+    // Counts number of neighbors
+    public int neighbors(int row, int col) {
+
+        int numOfNeighbors = 0;
+
+        // Checking if it is out of bounds
+        if((row - 1) >= 0) {
+            // Checking the top coordinate
+            if(game[row - 1][col]) {
+                numOfNeighbors++;
+            }
+        }
+
+        // Checking if it is out of bounds
+        if((col + 1) < game[row].length) {
+            // Checking the right coordinate
+            if(game[row][col + 1]) {
+                numOfNeighbors++;
+            }
+        }
+
+
+        // Checking if it is out of bounds
+        if((row + 1) < game.length) {
+            // Checking the bottom coordinate
+            if(game[row + 1][col]) {
+                numOfNeighbors++;
+            }
+        }
+
+
+        // Checking if it is out of bounds
+        if((col - 1) >= 0){
+            // Checking the left coordinate
+            if(game[row][col - 1]) {
+                numOfNeighbors++;
+            }
+        }
+
+
+        return numOfNeighbors;
+    }
+
+
 }
