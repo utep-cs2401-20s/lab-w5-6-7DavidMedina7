@@ -172,7 +172,7 @@ public class SnakeGame {
 
         // If previous coordinates do nothing
         if(currentPosition == previousPosition) {
-            // Do nothing
+            // Do nothing lol
         }
 
         // if not previous then make a recursive call
