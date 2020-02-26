@@ -36,6 +36,8 @@ public class SnakeGame {
 
         // Passing the address board to game
         game = board;
+
+        // change to nested for loop ^^^^
     }
 
 
@@ -126,11 +128,11 @@ public class SnakeGame {
     // each (x',y') cell that is examined.
     public int[] findTailRecursive() {
 
-        // Initializing the result array
-        int[] result = new int[3];
+        // Reset counters
+        resetCounters();
 
-
-        return result;
+        // Initial call at head position
+        return findTailRecursive(headPosition, headPosition);
     }
 
     // overloads the previous method, and is similar in definition, but starts at a position other
@@ -141,14 +143,45 @@ public class SnakeGame {
     // findTailRecursive(headPosition, headPosition).
     private int[] findTailRecursive(int[] currentPosition, int[] previousPosition) {
 
+
         // Initializing the result array
         int[] result = new int[3];
 
-        // Looking at head position and setting it to currentPosition
-        currentPosition = headPosition;
+        // Initialize length of the snake
+        int length = 0;
 
-        // Calling neighbors
-        neighbors(currentPosition[0], currentPosition[1]);
+        // Reset counters
+        resetCounters();
+
+        // Four different positions
+
+
+        // Check number neighbors at currentPosition
+        int numOfNeighbors = neighbors(currentPosition[0], currentPosition[1]);
+
+        // Base Case: Found the tail
+        if(numOfNeighbors == 1 && headPosition != currentPosition) {
+            result[0] = currentPosition[0];
+            result[1] = currentPosition[1];
+            result[0] = 0; // Size
+            return result;
+        }
+
+        // Get neighbor coordinates
+        if() {}
+
+        // If previous coordinates do nothing
+        if(currentPosition == previousPosition) {
+            // Do nothing
+        }
+
+        // if not previous then make a recursive call
+        if(currentPosition != previousPosition) {
+
+        }
+
+        // 4 if Return statements
+
 
 
 
@@ -164,12 +197,12 @@ public class SnakeGame {
     // **GETTERS**
 
     // gets the current state of the recursiveChecks counter.
-    private static int getRecursiveChecks() {
+    public static int getRecursiveChecks() {
         return recursiveChecks;
     }
 
     //  gets the current state of the exhaustiveChecks counter.
-    private static int getExhastedChecks() {
+    public static int getExhastedChecks() {
         return exhaustedChecks;
     }
 
