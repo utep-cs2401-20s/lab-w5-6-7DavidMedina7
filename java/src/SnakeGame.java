@@ -1,4 +1,19 @@
 public class SnakeGame {
+    public static void main(String[] args) {
+
+        boolean[][] board1 = {
+                {false, false, false, false, false},
+                {false, true, true, true, false},
+                {false, true, false, true, false},
+                {false, true, false, true, false},
+                {false, true, false, false, false},
+        };
+
+         int[] result = {4, 1, 8};
+                SnakeGame test = new SnakeGame(board1, 3, 3);
+                test.findTailRecursive();
+
+    }
 
     // **ATTRIBUTES**
 
@@ -16,6 +31,9 @@ public class SnakeGame {
 
     // Counts the number of positions checked when performing the tail search using recursive search, across all instances of the SnakeGame
     private static int recursiveChecks;
+
+    // Counts the length of the snake going through the recursion aspect of check
+    private static int length;
 
     // **Constructors**
 
@@ -143,47 +161,97 @@ public class SnakeGame {
     // findTailRecursive(headPosition, headPosition).
     private int[] findTailRecursive(int[] currentPosition, int[] previousPosition) {
 
-
         // Initializing the result array
         int[] result = new int[3];
 
-        // Initialize length of the snake
-        int length = 0;
+        // Holds the current x and y coordinates
+        int x = currentPosition[0];
+        int y = currentPosition[1];
 
-        // Reset counters
-        resetCounters();
-
-        // Four different positions
-
+        System.out.println("i: " + x + " j: " + y);
+        System.out.println("Recursive Checks: " + recursiveChecks);
+        System.out.println();
 
         // Check number neighbors at currentPosition
-        int numOfNeighbors = neighbors(currentPosition[0], currentPosition[1]);
+        int numOfNeighbors = neighbors(x, y);
+
+        System.out.println("Number of neighbors: " + numOfNeighbors);
 
         // Base Case: Found the tail
-        if(numOfNeighbors == 1 && headPosition != currentPosition) {
-            result[0] = currentPosition[0];
-            result[1] = currentPosition[1];
-            result[0] = 0; // Size
-            return result;
+        if(numOfNeighbors == 1) {
+            if(headPosition[0] != x && headPosition[1] != y) {
+
+                length++;
+                // Storing the x and y coordinates of the tail
+                result[0] = currentPosition[0];
+                result[1] = currentPosition[1];
+
+                // Storing the length of the snake
+                result[2] = length;
+
+                recursiveChecks++;
+
+                return result;
+
+            }
         }
 
-        // Get neighbor coordinates
-        if() {}
+         // Checking if it out of bounds
+         if(x - 1 >= 0 && (previousPosition[0] != x - 1)) {
+             // Checking the top coordinate
+             if(game[x - 1][y]) {
+                 length++;
+                 recursiveChecks++;
+                 previousPosition = currentPosition;
+                 int[] newPos = new int[] {currentPosition[0] - 1, currentPosition[1]};
+                 return findTailRecursive(newPos, previousPosition);
 
-        // If previous coordinates do nothing
-        if(currentPosition == previousPosition) {
-            // Do nothing lol
+             }
+         }
+
+        // Checking if it out of bounds
+        if(y + 1 < game[0].length && (previousPosition[1] != y + 1)) {
+            // Checking the right coordinate
+            if(game[x][y + 1]) {
+                length++;
+                recursiveChecks++;
+                previousPosition = currentPosition;
+                int[] newPos = new int[] {currentPosition[0], currentPosition[1] + 1};
+                return findTailRecursive(newPos, previousPosition);
+            }
         }
 
-        // if not previous then make a recursive call
-        if(currentPosition != previousPosition) {
-
+        // Checking if it is out of bounds
+        if(x + 1 < game.length && (previousPosition[0] != x + 1)) {
+            // Checking the bottom coordinate
+            if(game[x + 1][y]) {
+                length++;
+                recursiveChecks++;
+                previousPosition = currentPosition;
+                int[] newPos = new int[] {currentPosition[0] + 1, currentPosition[1]};
+                return findTailRecursive(newPos, previousPosition);
+            }
         }
 
-        // 4 if Return statements
+        // Checking if it out of bounds
+        if(y - 1 >= 0 && (previousPosition[1] != y - 1)) {
+            // Checking the left coordinate
+            if(game[x][y - 1]) {
+                length++;
+                recursiveChecks++;
+                previousPosition = currentPosition;
+                int[] newPos = new int[] {currentPosition[0], currentPosition[1] - 1};
+                return findTailRecursive(newPos, previousPosition);
 
+            }
+        }
 
+        recursiveChecks++;
+        length++;
 
+        System.out.println("Tail found at: i: " + result[0] + " j: " + result[1]);
+        System.out.println("Recursive Checks: " + recursiveChecks);
+        System.out.println("The length of the snake is: " + length);
 
         return result;
     }
@@ -244,7 +312,6 @@ public class SnakeGame {
                 numOfNeighbors++;
             }
         }
-
 
         return numOfNeighbors;
     }
